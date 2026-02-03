@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+.card {
+  border: none;
+  transition: transform 0.2s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.lotto-set {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.ball {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Color scheme for lotto balls */
+.ball-color-1 { background-color: #fbc400; } /* 1-10 */
+.ball-color-2 { background-color: #69c8f2; } /* 11-20 */
+.ball-color-3 { background-color: #ff7272; } /* 21-30 */
+.ball-color-4 { background-color: #aaa; } /* 31-40 */
+.ball-color-5 { background-color: #b0d840; } /* 41-45 */
