@@ -237,6 +237,13 @@ document.addEventListener('DOMContentLoaded', () => {
     excelFileInput.addEventListener('change', handleExcelFileUpload);
   }
 
+  const uploadPastDataBtn = document.getElementById('uploadPastDataBtn');
+  if (uploadPastDataBtn) {
+    uploadPastDataBtn.addEventListener('click', () => {
+      excelFileInput.click();
+    });
+  }
+
   // Disable stat button until data is loaded
   const statButton = document.querySelector('.btn-success');
   if (statButton) {
