@@ -3,7 +3,7 @@ let pastWinningNumbers = [];
 let numberFrequencies = {};
 let weightedNumberList = [];
 
-const REQUIRED_HEADERS = ['번호1', '번호2', '번호3', '번호4', '번호5', '번호6'];
+// const REQUIRED_HEADERS = ['번호1', '번호2', '번호3', '번호4', '번호5', '번호6'];
 const LOCAL_STORAGE_KEY = 'lottoWinningNumbers';
 
 // --- Core Logic ---
@@ -58,37 +58,24 @@ function handleExcelFileUpload(event) {
       const worksheet = workbook.Sheets[firstSheetName];
       const json = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
 
-      if (json.length === 0) {
-        alert("업로드된 엑셀 파일에 데이터가 없습니다.");
+      if (json.length < 3) { // Expect at least 3 rows: example headers, actual headers, and one data row
+        alert("업로드된 엑셀 파일에 예상되는 형식의 데이터가 부족합니다.");
         return;
       }
-
-      const headers = json[0]; // First row as headers
-      const missingHeaders = REQUIRED_HEADERS.filter(header => !headers.includes(header));
-
-      if (missingHeaders.length > 0) {
-        alert(`엑셀 파일 형식이 올바르지 않습니다. 다음 헤더가 필요합니다: ${missingHeaders.join(', ')}`);
-        // Optionally, clear the file input
-        event.target.value = '';
-        return;
-      }
-
-      const headerIndices = {};
-      REQUIRED_HEADERS.forEach(header => {
-        headerIndices[header] = headers.indexOf(header);
-      });
-
+      
       const newWinningNumbers = [];
-      for (let i = 1; i < json.length; i++) { // Start from second row for data
+      // Start from the third row (index 2) for data, as per the user's example
+      for (let i = 2; i < json.length; i++) {
         const row = json[i];
         const lottoSet = [];
-        for (const header of REQUIRED_HEADERS) {
-          const num = parseInt(row[headerIndices[header]], 10);
+        // Extract 6 winning numbers from columns C to H (indices 2 to 7)
+        for (let j = 2; j <= 7; j++) { // Columns C to H
+          const num = parseInt(row[j], 10);
           if (!isNaN(num) && num >= 1 && num <= 45) {
             lottoSet.push(num);
           }
         }
-        if (lottoSet.length === REQUIRED_HEADERS.length) {
+        if (lottoSet.length === 6) { // Ensure all 6 numbers were successfully parsed
           newWinningNumbers.push(...lottoSet);
         }
       }
