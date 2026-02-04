@@ -1,42 +1,208 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&display=swap");
 
-body {
-  font-family: 'Noto Sans KR', sans-serif;
+:root {
+  --color-background: #111111;
+  --color-card-background: #1a1a1a;
+  --color-border: #333333;
+  --color-text-primary: #e0e0e0;
+  --color-text-secondary: #aaaaaa;
+  /* --color-accent: #9fee37;  */
+  --color-accent: #7ff56f; /* A deep, modern purple inspired by some clean designs */
+  /* --color-accent-hover: #baeb7b; */
+  --color-accent-hover: #a6f89b;
+  --color-ball-1: #e08f00; /* Gold */
+  --color-ball-2: #0063cc; /* Deep Sky Blue */
+  --color-ball-3: #d8314f; /* Orange Red */
+  --color-ball-4: #6e7382; /* Lime Green */
+  --color-ball-5: #2c9e44; /* Medium Orchid */
 }
 
+body {
+  font-family: "Noto Sans KR", sans-serif;
+  background-color: var(--color-background) !important;
+  color: var(--color-text-primary) !important;
+  line-height: 1.7; /* Increased line-height for readability */
+  letter-spacing: 0.02em; /* Subtle letter spacing */
+  transition: background-color 0.3s ease; /* Smooth theme transitions */
+}
+
+/* Navbar */
+.navbar {
+  background-color: var(--color-card-background) !important;
+  border-bottom: 1px solid var(--color-border) !important;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.4); /* Softer, wider shadow */
+  padding: 1rem 0; /* More padding */
+}
+
+.navbar-brand {
+  color: var(--color-text-primary) !important;
+  font-size: 1.6rem; /* Slightly larger */
+  font-weight: 700;
+  transition: color 0.3s ease;
+}
+
+.navbar-brand:hover {
+  color: var(--color-accent) !important; /* Accent on hover */
+}
+
+/* Header Text Styles */
+.display-4 {
+  color: var(--color-text-primary);
+  font-weight: 700;
+  margin-bottom: 1.5rem; /* More spacing */
+}
+
+.lead {
+  color: var(--color-text-secondary) !important;
+  font-size: 1.15rem;
+}
+
+/* Main Container Spacing */
+.container.my-5 {
+  margin-top: 4rem !important;
+  margin-bottom: 4rem !important;
+}
+
+/* Card Styles */
 .card {
-  border: none;
-  transition: transform 0.2s ease-in-out;
+  background-color: var(--color-card-background) !important;
+  border: 1px solid var(--color-border);
+  border-radius: 12px; /* Slightly more rounded corners */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Much softer shadow */
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+  padding: 1.5rem; /* More internal padding */
 }
 
 .card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-5px); /* Gentle lift */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3); /* Slightly stronger shadow on hover */
+  border-color: var(--color-accent); /* Accent border on hover */
 }
 
+.card-body {
+  padding: 1.5rem; /* Ensure consistent padding */
+}
+
+.card-title {
+  color: var(--color-text-primary); /* Use primary text color for title */
+  font-weight: 700;
+  font-size: 1.8rem;
+  margin-bottom: 1.2rem;
+}
+
+.card-text {
+  color: var(--color-text-secondary);
+  font-size: 1rem;
+}
+
+/* Button Styles */
+.btn {
+  font-weight: 700;
+  border-radius: 8px; /* More rounded buttons */
+  padding: 0.8rem 1.8rem; /* More padding */
+  transition: all 0.3s ease;
+  text-transform: uppercase; /* Slight stylistic choice */
+  letter-spacing: 0.05em;
+  border: none; /* Remove default border */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Subtle button shadow */
+}
+
+.btn-primary,
+.btn-success,
+.btn-warning,
+.btn-info {
+  background-color: var(--color-accent); /* All primary actions use accent */
+  color: #ffffff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.btn-primary:hover,
+.btn-success:hover,
+.btn-warning:hover,
+.btn-info:hover {
+  background-color: var(--color-accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Lotto Ball Styles */
 .lotto-set {
   display: flex;
   justify-content: center;
-  gap: 10px;
-  margin-bottom: 12px;
+  gap: 15px; /* More gap */
+  margin-top: 2rem; /* More spacing */
+  margin-bottom: 2rem;
   flex-wrap: wrap;
 }
 
 .ball {
-  width: 40px;
-  height: 40px;
+  width: 55px; /* Slightly larger balls */
+  height: 55px;
   border-radius: 50%;
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
-  font-size: 1rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  font-weight: 700;
+  font-size: 1.3rem; /* Larger font size */
+  box-shadow:
+    0 3px 10px rgba(0, 0, 0, 0.4),
+    inset 0 0 8px rgba(255, 255, 255, 0.15); /* Softer 3D shadow */
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  background-image: linear-gradient(
+    145deg,
+    var(--color-ball-1),
+    darken(var(--color-ball-1), 15%)
+  ); /* Dynamic gradients */
 }
 
-/* Color scheme for lotto balls */
-.ball-color-1 { background-color: #fbc400; } /* 1-10 */
-.ball-color-2 { background-color: #69c8f2; } /* 11-20 */
-.ball-color-3 { background-color: #ff7272; } /* 21-30 */
-.ball-color-4 { background-color: #aaa; } /* 31-40 */
-.ball-color-5 { background-color: #b0d840; } /* 41-45 */
+.ball:hover {
+  transform: scale(1.08); /* Gentle scale */
+  box-shadow:
+    0 5px 15px rgba(0, 0, 0, 0.6),
+    inset 0 0 10px rgba(255, 255, 255, 0.25);
+}
+
+/* Specific ball colors with gradients */
+.ball-color-1 {
+  background-image: linear-gradient(145deg, var(--color-ball-1), #e79d1d);
+}
+.ball-color-2 {
+  background-image: linear-gradient(145deg, var(--color-ball-2), #1879e0);
+}
+.ball-color-3 {
+  background-image: linear-gradient(
+    145deg,
+    var(--color-ball-3),
+    rgb(218, 72, 19)
+  );
+}
+.ball-color-4 {
+  background-image: linear-gradient(145deg, var(--color-ball-4), #7f8491);
+}
+.ball-color-5 {
+  background-image: linear-gradient(145deg, var(--color-ball-5), #22b141);
+}
+
+/* Footer Styles */
+footer {
+  background-color: var(--color-card-background) !important;
+  border-top: 1px solid var(--color-border) !important;
+  color: var(--color-text-secondary) !important;
+  padding: 2rem 0; /* More padding */
+  font-size: 0.9rem;
+  margin-top: 5rem !important; /* More space from content */
+}
+
+#probabilityExplanation h4 {
+  color: var(--color-accent);
+  font-weight: 700;
+  font-size: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
