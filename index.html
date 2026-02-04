@@ -42,8 +42,42 @@
           <div class="card-body text-center">
             <h2 class="card-title h3">과거 데이터 기반 생성</h2>
             <p class="card-text text-white-50">역대 당첨 번호 데이터를 분석하여, 가장 확률 높은 번호 5세트를 추천합니다.</p>
+            <div class="mb-3">
+              <label for="excelFileInput" class="form-label visually-hidden">엑셀 파일 업로드</label>
+              <input class="form-control bg-dark text-white border-secondary" type="file" id="excelFileInput" accept=".xlsx, .xls">
+            </div>
             <button class="btn btn-success fw-bold" onclick="generateStatisticalSets()">통계 번호 받기</button>
             <div id="statisticalLottoContainer" class="mt-4"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 궁극의 번호 생성 -->
+      <div class="col-md-6">
+        <div class="card bg-secondary text-white h-100">
+          <div class="card-body text-center">
+            <h2 class="card-title h3">궁극의 번호 생성</h2>
+            <p class="card-text text-white-50">과거 데이터를 기반으로 계산된, 가장 당첨 확률이 높은 단 하나의 번호 조합을 추천합니다.</p>
+            <button class="btn btn-warning fw-bold" onclick="generateUltimateNumber()">궁극의 번호 받기</button>
+            <div id="ultimateLottoContainer" class="mt-4"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 확률 계산 방법 설명 -->
+    <div class="row mt-5">
+      <div class="col-12">
+        <div class="card bg-secondary text-white">
+          <div class="card-body">
+            <h2 class="card-title h3 text-center mb-4">확률 계산 방법 설명</h2>
+            <div id="probabilityExplanation">
+              <h4>과거 데이터 기반 생성</h4>
+              <p>이 기능은 업로드된 과거 당첨 번호 데이터를 분석하여 각 숫자의 출현 빈도를 계산합니다. 그리고 이 빈도수에 비례하여 가중치를 부여한 숫자 목록을 생성합니다. 로또 번호를 생성할 때, 이 가중치 목록에서 무작위로 숫자를 추출하여, 과거에 자주 나왔던 숫자가 다시 나올 확률이 높도록 합니다.</p>
+              
+              <h4>궁극의 번호 생성</h4>
+              <p>가장 많이 출현한 숫자들을 기반으로 조합합니다. 출현 빈도가 높은 숫자 6개를 선택하여 하나의 번호 세트를 만듭니다. 만약 가장 높은 빈도의 숫자가 6개 미만이라면, 그 다음으로 높은 빈도의 숫자들을 추가하여 6개를 채웁니다.</p>
+            </div>
           </div>
         </div>
       </div>
@@ -55,6 +89,7 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script src="main.js"></script>
 </body>
 
