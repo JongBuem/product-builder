@@ -70,7 +70,7 @@ function handleExcelFileUpload(event) {
       
       const newWinningNumbers = []; // 회차별 배열: [[n1,...,n6], ...]
       // Start from the third row (index 2) for data, as per the user's example
-      for (let i = 2; i < json.length; i++) {
+      for (let i = 1; i < json.length; i++) {
         const row = json[i];
         const lottoSet = [];
         // Extract 6 winning numbers from columns C to H (indices 2 to 7)
