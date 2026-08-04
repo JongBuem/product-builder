@@ -30,7 +30,7 @@
       <div class="text-center mb-5">
         <h1 class="display-4 fw-bold">로또 번호 생성기</h1>
         <p class="lead text-white-50">
-          단순한 무작위 추천을 넘어, 통계적 분석으로 확률을 높여보세요.
+          당첨 확률은 모든 조합이 동일합니다. 여러 생성 방식을 비교해보세요.
         </p>
       </div>
 
@@ -60,10 +60,10 @@
             <div class="card-body text-center">
               <h2 class="card-title h3">데이터 기반 생성</h2>
               <p class="card-text text-white-50">
-                역대 당첨 번호 데이터를 분석하여, 가장 확률 높은 번호 5세트를
-                추천합니다.
+                과거 출현 빈도에 가중치를 부여해 추출합니다. 당첨 확률은 무작위와 동일합니다.
               </p>
               <button
+                id="btnStatistical"
                 class="btn btn-warning fw-bold"
                 onclick="generateStatisticalSets()"
               >
@@ -80,16 +80,84 @@
             <div class="card-body text-center">
               <h2 class="card-title h3">궁극의 번호 생성</h2>
               <p class="card-text text-white-50">
-                과거 데이터를 기반으로 계산된, 가장 당첨 확률이 높은 단 하나의
-                번호 조합을 추천합니다.
+                빈도·최신성·미출현 지표를 합산한 점수 기반 추출입니다. 당첨 확률은 무작위와 동일합니다.
               </p>
               <button
+                id="btnUltimate"
                 class="btn btn-warning fw-bold"
                 onclick="generateUltimateNumber()"
               >
                 궁극의 번호 받기
               </button>
               <div id="ultimateLottoContainer" class="mt-4"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 기대 수령액 최적화 (신규) -->
+        <div class="col-md-6">
+          <div class="card bg-secondary text-white h-100">
+            <div class="card-body text-center">
+              <h2 class="card-title h3">기대 수령액 최적화</h2>
+              <p class="card-text text-white-50">
+                당첨 확률은 모든 조합이 동일합니다(1/8,145,060).<br>
+                이 기능은 다른 참가자들이 많이 고르는 조합을 회피해서,
+                당첨됐을 때 나눠 갖는 인원을 줄이는 것을 목적으로 합니다.
+              </p>
+              <button
+                id="btnEV"
+                class="btn btn-warning fw-bold"
+                onclick="generateEVOptimizedSets()"
+              >
+                회피 필터 번호 받기
+              </button>
+              <div id="evLottoContainer" class="mt-4"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 백테스트 카드 -->
+      <div class="row mt-5">
+        <div class="col-12">
+          <div class="card bg-secondary text-white">
+            <div class="card-body text-center">
+              <h2 class="card-title h3">전략 백테스트</h2>
+              <p class="card-text text-white-50">
+                업로드된 데이터를 학습(60%) / 검증(40%)으로 분할하여, 5가지 전략을 각 500세트씩 생성하고 검증구간 실제 당첨번호와 대조합니다.
+              </p>
+              <button
+                id="btnBacktest"
+                class="btn btn-warning fw-bold"
+                onclick="runBacktest()"
+                disabled
+              >
+                백테스트 실행
+              </button>
+              <div id="backtestContainer" class="mt-4"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 검증 유틸 카드 -->
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="card bg-secondary text-white">
+            <div class="card-body text-center">
+              <h2 class="card-title h3">통계 검증</h2>
+              <p class="card-text text-white-50">
+                업로드된 데이터의 균등성 검정(카이제곱), 신규 생성기 균등성 검정(10만 회), 필터 통과율 추정을 실행합니다.
+              </p>
+              <button
+                id="btnValidate"
+                class="btn btn-warning fw-bold"
+                onclick="runValidation()"
+                disabled
+              >
+                검증 실행
+              </button>
+              <div id="validateContainer" class="mt-4"></div>
             </div>
           </div>
         </div>
@@ -104,21 +172,34 @@
                 확률 계산 방법 설명
               </h2>
               <div id="probabilityExplanation">
+                <h4>로또 6/45의 수학적 사실</h4>
+                <p>
+                  로또 6/45의 1등 당첨 확률은 정확히 <strong>1/8,145,060</strong>입니다.
+                  각 회차는 독립 시행이므로, 과거 데이터는 다음 회차의 번호를 예측하는 데 수학적으로 아무런 도움이 되지 않습니다.
+                  N회차 기준 각 번호의 기대 출현 횟수는 N×6/45이며, 실제 빈도 편차는 통계적 노이즈 범위 안에 들어옵니다.
+                  "핫 넘버"는 신호가 아니라 노이즈입니다.
+                </p>
+
                 <h4>과거 데이터 기반 생성</h4>
                 <p>
-                  이 기능은 업로드된 과거 당첨 번호 데이터를 분석하여 각 숫자의
-                  출현 빈도를 계산합니다. 그리고 이 빈도수에 비례하여 가중치를
-                  부여한 숫자 목록을 생성합니다. 로또 번호를 생성할 때, 이
-                  가중치 목록에서 무작위로 숫자를 추출하여, 과거에 자주 나왔던
-                  숫자가 다시 나올 확률이 높도록 합니다.
+                  업로드된 과거 당첨번호의 출현 빈도에 비례하여 가중치를 부여한 뒤 무작위 추출합니다.
+                  당첨 확률은 순수 무작위와 동일합니다.
                 </p>
 
                 <h4>궁극의 번호 생성</h4>
                 <p>
-                  가장 많이 출현한 숫자들을 기반으로 조합합니다. 출현 빈도가
-                  높은 숫자 6개를 선택하여 하나의 번호 세트를 만듭니다. 만약
-                  가장 높은 빈도의 숫자가 6개 미만이라면, 그 다음으로 높은
-                  빈도의 숫자들을 추가하여 6개를 채웁니다.
+                  빈도 점수(35%) + 최신성 점수(40%) + 미출현 점수(25%)를 합산하여 가중 랜덤 추출합니다.
+                  단, <strong>최신성 점수(최근 출현 우대)와 미출현 점수(장기 미출현 우대)는 서로 반대 방향으로 작용하여 상당 부분 상쇄됩니다.</strong>
+                  당첨 확률은 무작위와 동일합니다.
+                </p>
+
+                <h4>기대 수령액 최적화 — 유일하게 수학적 근거가 있는 기능</h4>
+                <p>
+                  1등은 분배식(pari-mutuel) 구조입니다. 당첨 확률은 어떤 방법으로도 바꿀 수 없지만,
+                  같은 조합을 고른 사람이 적으면 수령액이 올라갑니다.
+                  이 기능의 수학적 근거는 <strong>확률 향상이 아니라 분배 인원 감소</strong>입니다.
+                  생일 숫자 편중, 연속 번호, 등차수열, 마킹지 패턴 등 많은 사람이 고르는 조합 특성을 회피합니다.
+                  "이 필터는 당첨 확률을 높이지 않습니다"
                 </p>
               </div>
             </div>
@@ -143,5 +224,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="main.js"></script>
+    <script src="ev-generator.js"></script>
+    <script src="backtest.js"></script>
+    <script src="validate.js"></script>
   </body>
 </html>

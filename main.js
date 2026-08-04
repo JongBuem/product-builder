@@ -20,8 +20,10 @@ function processLottoData(draws) {
     calculateFrequencies();
     createWeightedList();
     console.log(`Lotto data loaded: ${pastDraws.length}회차 데이터 처리 완료.`);
-    const statButton = document.querySelector('.btn-success');
-    if (statButton) statButton.disabled = false;
+    ['btnStatistical', 'btnUltimate', 'btnEV'].forEach(id => {
+      const btn = document.getElementById(id);
+      if (btn) btn.disabled = false;
+    });
   }
 }
 
@@ -63,27 +65,39 @@ function handleExcelFileUpload(event) {
       const worksheet = workbook.Sheets[firstSheetName];
       const json = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
 
-      if (json.length < 3) { // Expect at least 3 rows: example headers, actual headers, and one data row
+      if (json.length < 2) {
         alert("업로드된 엑셀 파일에 예상되는 형식의 데이터가 부족합니다.");
         return;
       }
-      
+
+      // 헤더 행 자동 감지: 열 2~7 모두 유효한 로또 번호(1~45)인 첫 행을 데이터 시작으로 사용
+      let dataStartIndex = 0;
+      for (let i = 0; i < Math.min(json.length, 5); i++) {
+        const row = json[i];
+        const nums = [2,3,4,5,6,7].map(j => parseInt(row[j], 10));
+        if (nums.every(n => !isNaN(n) && n >= 1 && n <= 45)) {
+          dataStartIndex = i;
+          break;
+        }
+        dataStartIndex = i + 1; // 아직 데이터 행 못 찾은 경우 다음으로
+      }
+      console.log(`헤더 자동 감지: ${dataStartIndex}행부터 데이터 시작`);
+
       const newWinningNumbers = []; // 회차별 배열: [[n1,...,n6], ...]
-      // Start from the third row (index 2) for data, as per the user's example
-      for (let i = 1; i < json.length; i++) {
+      for (let i = dataStartIndex; i < json.length; i++) {
         const row = json[i];
         const lottoSet = [];
-        // Extract 6 winning numbers from columns C to H (indices 2 to 7)
-        for (let j = 2; j <= 7; j++) { // Columns C to H
+        for (let j = 2; j <= 7; j++) {
           const num = parseInt(row[j], 10);
           if (!isNaN(num) && num >= 1 && num <= 45) {
             lottoSet.push(num);
           }
         }
-        if (lottoSet.length === 6) { // Ensure all 6 numbers were successfully parsed
-          newWinningNumbers.push(lottoSet); // 회차 단위로 push
+        if (lottoSet.length === 6) {
+          newWinningNumbers.push(lottoSet);
         }
       }
+      console.log(`파싱된 회차 수: ${newWinningNumbers.length}회차`);
 
       if (newWinningNumbers.length === 0) {
         alert("엑셀 파일에서 유효한 로또 번호를 찾을 수 없습니다. 번호가 1에서 45 사이인지 확인해주세요.");
@@ -244,14 +258,21 @@ function generateUltimateNumber() {
     while (chosen.size < 6 && pool.length > 0) {
       const totalWeight = pool.reduce((sum, [, w]) => sum + w, 0);
       let rand = Math.random() * totalWeight;
+      let selected = false;
 
       for (let i = 0; i < pool.length; i++) {
         rand -= pool[i][1];
         if (rand <= 0) {
           chosen.add(pool[i][0]);
-          pool.splice(i, 1); // 선택된 번호 제거
+          pool.splice(i, 1);
+          selected = true;
           break;
         }
+      }
+      // 부동소수점 오차로 아무것도 선택되지 않은 경우 폴백
+      if (!selected && pool.length > 0) {
+        chosen.add(pool[pool.length - 1][0]);
+        pool.pop();
       }
     }
 
@@ -328,11 +349,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Disable stat button until data is loaded
-  const statButton = document.querySelector('.btn-success');
-  if (statButton) {
-    statButton.disabled = true;
-  }
+  // 데이터 필요 버튼 초기 비활성화 (데이터 로드 후 processLottoData에서 활성화)
+  ['btnStatistical', 'btnUltimate', 'btnEV'].forEach(id => {
+    const btn = document.getElementById(id);
+    if (btn) btn.disabled = true;
+  });
   
   loadDataFromLocalStorage();
 });
